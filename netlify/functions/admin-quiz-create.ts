@@ -22,6 +22,10 @@ export const handler: Handler = async (event) => {
     const auth = event.headers.authorization
     const user = await getUserFromAuthHeader(auth)
     if (!user) return { statusCode: 401, body: 'Unauthorized' }
+    const adminEmail = process.env.ADMIN_EMAIL
+    if (adminEmail && user.email?.toLowerCase() !== adminEmail.toLowerCase()) {
+      return { statusCode: 403, body: 'Forbidden' }
+    }
 
     const parsed = bodySchema.safeParse(JSON.parse(event.body ?? '{}'))
     if (!parsed.success) return { statusCode: 400, body: JSON.stringify(parsed.error.flatten()) }
