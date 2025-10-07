@@ -26,3 +26,6 @@ dist-ssr
 *.sw?
 
 /src/generated/prisma
+
+# Local Netlify folder
+.netlify
